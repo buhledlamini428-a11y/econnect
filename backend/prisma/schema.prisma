@@ -1,0 +1,381 @@
+// E-connect database schema
+// Default provider is SQLite for easy local development.
+// For production, change provider to "postgresql" and set DATABASE_URL accordingly.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+ datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------------
+// USERS & PROFILE
+// ------------------------------------------------------------------
+
+model User {
+  id                  String    @id @default(uuid())
+  fullName            String
+  username            String    @unique
+  email               String?   @unique
+  phone               String    @unique
+  password            String // bcrypt hash — never expose
+  dateOfBirth         DateTime?
+  gender              String?
+  bio                 String?
+  profilePhoto        String?
+  country             String    @default("Eswatini")
+  region              String?
+  city                String?
+  area                String?
+  languages           String? // comma-separated
+  isPhoneVerified     Boolean   @default(false)
+  isEmailVerified     Boolean   @default(false)
+  isVerifiedBadge     Boolean   @default(false)
+  verifiedBadgeExpiry DateTime?
+  role                String    @default("user") // "user" | "admin"
+  status              String    @default("active") // active | warning | restricted | suspended | blocked
+  restrictionReason   String?
+  trustScore          Int       @default(50)
+  completedJobsCount  Int       @default(0)
+  cancelledJobsCount  Int       @default(0)
+  memberSince         DateTime  @default(now())
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  skills               Skill[]
+  qualifications        Qualification[]
+  listings              Listing[]            @relation("UserListings")
+  sentMessages           Message[]            @relation("SentMessages")
+  conversationsAsUserA   Conversation[]       @relation("ConversationUserA")
+  conversationsAsUserB   Conversation[]       @relation("ConversationUserB")
+  ratingsGiven           Rating[]             @relation("RatingsGiven")
+  ratingsReceived        Rating[]             @relation("RatingsReceived")
+  reportsMade            Report[]             @relation("ReportsMade")
+  reportsReceived        Report[]             @relation("ReportsReceived")
+  notifications          Notification[]
+  savedListings          SavedListing[]
+  subscriptions          Subscription[]
+  payments               Payment[]
+  otps                   Otp[]
+  jobApplications        JobApplication[]
+  auditLogs              AuditLog[]
+  restrictions           AccountRestriction[]
+  verificationRequests   VerificationRequest[]
+  blockedByMe             BlockedUser[]        @relation("Blocker")
+  blockedMe               BlockedUser[]        @relation("Blocked")
+
+  @@index([status])
+  @@index([city, region])
+}
+
+model Skill {
+  id     String @id @default(uuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+
+  @@index([userId])
+}
+
+model Qualification {
+  id          String  @id @default(uuid())
+  userId      String
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  institution String?
+  year        Int?
+
+  @@index([userId])
+}
+
+// ------------------------------------------------------------------
+// CATEGORIES
+// ------------------------------------------------------------------
+
+model Category {
+  id       String     @id @default(uuid())
+  name     String
+  type     String // JOB | TASK | SERVICE | PRODUCT | REQUEST
+  icon     String?
+  listings Listing[]
+
+  @@unique([name, type])
+}
+
+// ------------------------------------------------------------------
+// LISTINGS (unifies Jobs, Tasks, Services, Products, Requests)
+// ------------------------------------------------------------------
+
+model Listing {
+  id                  String    @id @default(uuid())
+  type                String // JOB | TASK | SERVICE | PRODUCT | REQUEST
+  title               String
+  description         String
+  categoryId          String?
+  category            Category? @relation(fields: [categoryId], references: [id])
+  userId              String
+  user                User      @relation("UserListings", fields: [userId], references: [id], onDelete: Cascade)
+
+  price               Float?
+  priceType           String? // fixed | hourly | negotiable
+  currency            String    @default("SZL")
+
+  // Job-specific
+  employmentType      String? // full_time | part_time | temporary | casual | contract | remote | local | apprenticeship | internship | volunteer
+  vacancies            Int?
+  applicationDeadline  DateTime?
+  requirements         String?
+  skillsRequired       String?
+  experienceRequired   String?
+  contactMethod        String?
+
+  // Task/Service duration
+  durationValue        Int?
+  durationUnit         String? // hours | days | months | years
+
+  // Product-specific
+  condition            String? // new | used
+
+  // Location
+  region               String?
+  city                 String?
+  area                 String?
+  country              String    @default("Eswatini")
+  latitude             Float?
+  longitude            Float?
+
+  photos               String? // JSON-encoded array of URLs
+  status               String    @default("active") // active | closed | sold | expired | removed
+  isFeatured           Boolean   @default(false)
+  featuredUntil        DateTime?
+  viewsCount           Int       @default(0)
+
+  createdAt            DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  applications          JobApplication[]
+  ratings                Rating[]
+  savedBy                SavedListing[]
+  reports                Report[]
+  conversations           Conversation[]
+
+  @@index([type, status])
+  @@index([city, region])
+  @@index([categoryId])
+}
+
+model JobApplication {
+  id          String   @id @default(uuid())
+  listingId   String
+  listing     Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  applicantId String
+  applicant   User     @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+  message     String?
+  status      String   @default("pending") // pending | reviewed | accepted | rejected
+  createdAt   DateTime @default(now())
+
+  @@unique([listingId, applicantId])
+}
+
+// ------------------------------------------------------------------
+// MESSAGING
+// ------------------------------------------------------------------
+
+model Conversation {
+  id            String    @id @default(uuid())
+  listingId     String?
+  listing       Listing?  @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  userAId       String
+  userA         User      @relation("ConversationUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userBId       String
+  userB         User      @relation("ConversationUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  createdAt     DateTime  @default(now())
+  lastMessageAt DateTime  @default(now())
+  messages      Message[]
+
+  @@unique([listingId, userAId, userBId])
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  content        String
+  imageUrl       String?
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId])
+}
+
+// ------------------------------------------------------------------
+// RATINGS & REVIEWS
+// ------------------------------------------------------------------
+
+model Rating {
+  id                 String   @id @default(uuid())
+  listingId          String?
+  listing            Listing? @relation(fields: [listingId], references: [id], onDelete: SetNull)
+  raterId            String
+  rater              User     @relation("RatingsGiven", fields: [raterId], references: [id], onDelete: Cascade)
+  rateeId            String
+  ratee              User     @relation("RatingsReceived", fields: [rateeId], references: [id], onDelete: Cascade)
+  stars              Int // 1-5
+  review             String?
+  reliability        Int?
+  communication      Int?
+  quality            Int?
+  professionalism    Int?
+  paymentBehaviour   Int?
+  createdAt          DateTime @default(now())
+
+  @@unique([listingId, raterId, rateeId])
+  @@index([rateeId])
+}
+
+// ------------------------------------------------------------------
+// SAFETY: REPORTS, BLOCKS, RESTRICTIONS, VERIFICATION
+// ------------------------------------------------------------------
+
+model Report {
+  id               String   @id @default(uuid())
+  reporterId       String
+  reporter         User     @relation("ReportsMade", fields: [reporterId], references: [id], onDelete: Cascade)
+  reportedUserId   String?
+  reportedUser     User?    @relation("ReportsReceived", fields: [reportedUserId], references: [id], onDelete: Cascade)
+  listingId        String?
+  listing          Listing? @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  reason           String // scam | fraud | fake_job | fake_product | harassment | misleading | inappropriate | non_delivery | abuse | suspicious_account | other
+  details          String?
+  status           String   @default("pending") // pending | reviewed | actioned | dismissed
+  createdAt        DateTime @default(now())
+
+  @@index([status])
+}
+
+model BlockedUser {
+  id        String   @id @default(uuid())
+  blockerId String
+  blocker   User     @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+}
+
+model AccountRestriction {
+  id         String    @id @default(uuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reason     String
+  level      String // warning | restriction | suspension | block
+  issuedBy   String? // admin user id
+  createdAt  DateTime  @default(now())
+  liftedAt   DateTime?
+}
+
+model VerificationRequest {
+  id            String    @id @default(uuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  documentUrl   String?
+  notes         String?
+  status        String    @default("pending") // pending | approved | rejected
+  reviewedBy    String?
+  createdAt     DateTime  @default(now())
+  reviewedAt    DateTime?
+}
+
+// ------------------------------------------------------------------
+// MONETISATION
+// ------------------------------------------------------------------
+
+model Subscription {
+  id        String    @id @default(uuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan      String // verified_badge | featured_listing | boost | priority_placement | business_profile | ad_package
+  price     Float
+  currency  String    @default("SZL")
+  startDate DateTime  @default(now())
+  endDate   DateTime?
+  status    String    @default("active") // active | expired | cancelled
+  createdAt DateTime  @default(now())
+}
+
+model Payment {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  amount     Float
+  currency   String   @default("SZL")
+  purpose    String // e.g. "verified_badge", "featured_listing"
+  provider   String? // e.g. "mtn_momo", "manual" — pluggable, set at integration time
+  status     String   @default("pending") // pending | completed | failed | refunded
+  reference  String?  @unique
+  createdAt  DateTime @default(now())
+}
+
+model AdminSetting {
+  id    String @id @default(uuid())
+  key   String @unique // e.g. "price_verified_badge", "price_featured_listing"
+  value String // stored as string, parsed by consumer
+}
+
+// ------------------------------------------------------------------
+// NOTIFICATIONS, SAVED LISTINGS, AUDIT
+// ------------------------------------------------------------------
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId, isRead])
+}
+
+model SavedListing {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  listingId String
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, listingId])
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  details   String?
+  createdAt DateTime @default(now())
+}
+
+model Otp {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone     String?
+  email     String?
+  code      String
+  purpose   String // registration | login | reset_password
+  expiresAt DateTime
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone])
+}

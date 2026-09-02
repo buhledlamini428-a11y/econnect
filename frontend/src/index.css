@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  font-family: "Inter", sans-serif;
+  color: #1B1730;
+  background-color: #F6F5FB;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1, h2, h3, .font-display {
+  font-family: "Sora", sans-serif;
+}
+
+.page-scroll {
+  padding-bottom: 88px;
+}
+
+:focus-visible {
+  outline: 2px solid #6D5DFB;
+  outline-offset: 2px;
+}
+
+/* Reusable gradient treatment matching the E-connect logo mark */
+.brand-mark {
+  background-image: linear-gradient(135deg, #9B8CFF 0%, #6D5DFB 45%, #4F3FE0 100%);
+}
