@@ -76,7 +76,7 @@ export default function Profile() {
         )}
 
         <h2 className="font-semibold text-ink text-sm mt-6 mb-2">Listings</h2>
-        <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-3">
           {user.listings?.map((l) => <ListingCard key={l.id} listing={l} />)}
         </div>
       </div>

@@ -41,7 +41,7 @@ export default function Explore() {
         {!loading && listings.length === 0 && (
           <p className="text-ink/50 text-sm mt-6">No {LABEL[type].toLowerCase()} yet. Be the first to post one.</p>
         )}
-        <div className="grid grid-cols-2 gap-3">
+                 <div className="space-y-3">
           {listings.map((l) => <ListingCard key={l.id} listing={l} />)}
         </div>
       </div>

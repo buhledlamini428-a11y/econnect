@@ -60,7 +60,7 @@ export default function Search() {
           </div>
         )}
 
-        <div className="grid grid-cols-2 gap-3 mt-3">
+                 <div className="space-y-3 mt-3">
           {results.map((l) => <ListingCard key={l.id} listing={l} />)}
         </div>
         {results.length === 0 && <p className="text-ink/50 text-sm mt-6 text-center">No results found.</p>}

@@ -26,12 +26,13 @@ router.get("/", async (req, res, next) => {
       if (minPrice) where.price.gte = Number(minPrice);
       if (maxPrice) where.price.lte = Number(maxPrice);
     }
-    if (q) {
+        if (q) {
       where.OR = [
-        { title: { contains: q } },
-        { description: { contains: q } },
+        { title: { contains: q, mode: "insensitive" } },
+        { description: { contains: q, mode: "insensitive" } },
       ];
     }
+    
     if (verifiedOnly === "true") {
       where.user = { isVerifiedBadge: true };
     }

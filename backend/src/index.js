@@ -16,6 +16,7 @@ import premiumRoutes from "./routes/premium.routes.js";
 import adminRoutes from "./routes/admin.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import { notFoundHandler, errorHandler } from "./middleware/errorHandler.js";
+import notificationRoutes from "./routes/notifications.routes.js";
 
 dotenv.config();
 
@@ -47,6 +48,7 @@ app.use("/api/reports", reportRoutes);
 app.use("/api/premium", premiumRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/upload", uploadRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

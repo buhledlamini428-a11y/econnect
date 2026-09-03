@@ -42,8 +42,11 @@ router.get("/users", async (req, res, next) => {
     const { status, q, page = 1, pageSize = 25 } = req.query;
     const where = {};
     if (status) where.status = status;
-    if (q) where.OR = [{ fullName: { contains: q } }, { username: { contains: q } }, { phone: { contains: q } }];
-
+     if (q) where.OR = [
+      { fullName: { contains: q, mode: "insensitive" } },
+      { username: { contains: q, mode: "insensitive" } },
+      { phone: { contains: q, mode: "insensitive" } },
+    ];
     const users = await prisma.user.findMany({
       where, orderBy: { createdAt: "desc" },
       skip: (Number(page) - 1) * Number(pageSize), take: Number(pageSize),
