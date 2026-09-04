@@ -1,11 +1,11 @@
-import { useState } from "react";
+ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
 
 export default function OtpVerify() {
   const { state } = useLocation();
-  const [phone] = useState(state?.phone || "");
+  const [email] = useState(state?.email || "");
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function OtpVerify() {
     setError("");
     setLoading(true);
     try {
-      const res = await api.post("/auth/verify-otp", { phone, code });
+      const res = await api.post("/auth/verify-otp", { email, code });
       login(res.data.token, res.data.user);
       navigate("/home");
     } catch (err) {
@@ -29,14 +29,14 @@ export default function OtpVerify() {
 
   async function handleResend() {
     try {
-      await api.post("/auth/resend-otp", { phone });
+      await api.post("/auth/resend-otp", { email });
     } catch {}
   }
 
   return (
     <div className="min-h-screen bg-ivory px-6 py-10">
-      <h1 className="font-display font-bold text-2xl text-ink mb-1">Verify your phone</h1>
-      <p className="text-ink/60 mb-6">Enter the 6-digit code sent to {phone}</p>
+      <h1 className="font-display font-bold text-2xl text-ink mb-1">Check your email</h1>
+      <p className="text-ink/60 mb-6">Enter the 6-digit code sent to {email}</p>
 
       <form onSubmit={handleVerify} className="space-y-4">
         <input

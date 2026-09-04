@@ -12,23 +12,23 @@ export function validateBody(schema) {
 }
 
 export const schemas = {
-  register: z.object({
+   register: z.object({
     fullName: z.string().min(2),
     username: z.string().min(3).max(30).regex(/^[a-zA-Z0-9_.]+$/, "Letters, numbers, dots, underscores only"),
     phone: z.string().min(8),
-    email: z.string().email().optional().or(z.literal("")).optional(),
+    email: z.string().email("Please enter a valid email address"),
     password: z.string().min(8),
     dateOfBirth: z.string().optional(),
     gender: z.string().optional(),
     region: z.string().optional(),
     city: z.string().optional(),
-  }),
+  }), 
   login: z.object({
     identifier: z.string().min(3), // phone, email, or username
     password: z.string().min(1),
   }),
-  verifyOtp: z.object({
-    phone: z.string().min(8),
+    verifyOtp: z.object({
+    email: z.string().email(),
     code: z.string().length(6),
   }),
   listingCreate: z.object({

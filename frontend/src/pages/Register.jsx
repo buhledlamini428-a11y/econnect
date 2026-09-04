@@ -19,8 +19,9 @@ export default function Register() {
     setError("");
     setLoading(true);
     try {
-      await api.post("/auth/register", form);
-      navigate("/verify-otp", { state: { phone: form.phone } });
+      
+           await api.post("/auth/register", form);
+      navigate("/verify-otp", { state: { email: form.email } }); 
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed");
     } finally {
@@ -40,8 +41,8 @@ export default function Register() {
           className="w-full border border-black/10 rounded-xl px-4 py-3 bg-white" required />
         <input placeholder="Phone (e.g. +268 76 000 000)" value={form.phone} onChange={(e) => update("phone", e.target.value)}
           className="w-full border border-black/10 rounded-xl px-4 py-3 bg-white" required />
-        <input placeholder="Email (optional)" value={form.email} onChange={(e) => update("email", e.target.value)}
-          className="w-full border border-black/10 rounded-xl px-4 py-3 bg-white" />
+               <input type="email" placeholder="Email" value={form.email} onChange={(e) => update("email", e.target.value)}
+          className="w-full border border-black/10 rounded-xl px-4 py-3 bg-white" required />
         <input type="password" placeholder="Password (min 8 characters)" value={form.password}
           onChange={(e) => update("password", e.target.value)}
           className="w-full border border-black/10 rounded-xl px-4 py-3 bg-white" required />

@@ -14,7 +14,7 @@ router.post("/register", validateBody(schemas.register), async (req, res, next) 
     const { fullName, username, phone, email, password, dateOfBirth, gender, region, city } = req.body;
 
     const existing = await prisma.user.findFirst({
-      where: { OR: [{ phone }, { username }, ...(email ? [{ email }] : [])] },
+      where: { OR: [{ phone }, { username }, { email }] },
     });
     if (existing) {
       return res.status(409).json({ error: "An account with this phone, username, or email already exists" });
@@ -23,8 +23,7 @@ router.post("/register", validateBody(schemas.register), async (req, res, next) 
     const hashed = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
-        fullName, username, phone,
-        email: email || null,
+        fullName, username, phone, email,
         password: hashed,
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         gender, region, city,
@@ -34,14 +33,14 @@ router.post("/register", validateBody(schemas.register), async (req, res, next) 
     const code = generateOtpCode();
     await prisma.otp.create({
       data: {
-        userId: user.id, phone,
+        userId: user.id, email,
         code, purpose: "registration",
         expiresAt: new Date(Date.now() + OTP_EXPIRY_MIN * 60 * 1000),
       },
     });
-    await sendOtp(phone, code, "sms");
+    await sendOtp(email, code);
 
-    res.status(201).json({ message: "Registered. OTP sent to phone.", userId: user.id, phone });
+    res.status(201).json({ message: "Registered. OTP sent to email.", userId: user.id, email });
   } catch (err) {
     next(err);
   }
@@ -50,18 +49,18 @@ router.post("/register", validateBody(schemas.register), async (req, res, next) 
 // POST /api/auth/verify-otp
 router.post("/verify-otp", validateBody(schemas.verifyOtp), async (req, res, next) => {
   try {
-    const { phone, code } = req.body;
+    const { email, code } = req.body;
 
     const otp = await prisma.otp.findFirst({
-      where: { phone, code, consumed: false, expiresAt: { gt: new Date() } },
+      where: { email, code, consumed: false, expiresAt: { gt: new Date() } },
       orderBy: { createdAt: "desc" },
     });
     if (!otp) return res.status(400).json({ error: "Invalid or expired OTP" });
 
     await prisma.otp.update({ where: { id: otp.id }, data: { consumed: true } });
     const user = await prisma.user.update({
-      where: { phone },
-      data: { isPhoneVerified: true },
+      where: { email },
+      data: { isEmailVerified: true, isPhoneVerified: true },
     });
 
     const token = signToken(user);
@@ -74,16 +73,16 @@ router.post("/verify-otp", validateBody(schemas.verifyOtp), async (req, res, nex
 // POST /api/auth/resend-otp
 router.post("/resend-otp", async (req, res, next) => {
   try {
-    const { phone } = req.body;
-    if (!phone) return res.status(400).json({ error: "Phone is required" });
-    const user = await prisma.user.findUnique({ where: { phone } });
-    if (!user) return res.status(404).json({ error: "No account with this phone number" });
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: "Email is required" });
+    const user = await prisma.user.findUnique({ where: { email } });
+    if (!user) return res.status(404).json({ error: "No account with this email" });
 
     const code = generateOtpCode();
     await prisma.otp.create({
-      data: { userId: user.id, phone, code, purpose: "registration", expiresAt: new Date(Date.now() + OTP_EXPIRY_MIN * 60 * 1000) },
+      data: { userId: user.id, email, code, purpose: "registration", expiresAt: new Date(Date.now() + OTP_EXPIRY_MIN * 60 * 1000) },
     });
-    await sendOtp(phone, code, "sms");
+    await sendOtp(email, code);
     res.json({ message: "OTP resent" });
   } catch (err) {
     next(err);
