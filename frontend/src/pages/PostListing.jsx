@@ -4,17 +4,12 @@ import api from "../api/client";
 import TopBar from "../components/TopBar";
 import BottomNav from "../components/BottomNav";
 import { useAuth } from "../context/AuthContext";
-
-const TYPES = [
-  { value: "JOB", label: "Job" },
-  { value: "TASK", label: "Task / Gig" },
-  { value: "SERVICE", label: "Service" },
-  { value: "PRODUCT", label: "Product (Buy & Sell)" },
-  { value: "REQUEST", label: "Request (\"I need...\")" },
-];
+import { useToast } from "../context/ToastContext";
+import { LISTING_TYPE_LIST } from "../constants/listingTypes";
 
 export default function PostListing() {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const navigate = useNavigate();
   const [type, setType] = useState("JOB");
   const [categories, setCategories] = useState([]);
@@ -87,9 +82,11 @@ export default function PostListing() {
       }
       if (type === "PRODUCT") payload.condition = form.condition;
 
-      const res = await api.post("/listings", payload);
+         const res = await api.post("/listings", payload);
+      showToast("Listing posted!");
       navigate(`/listing/${res.data.listing.id}`);
     } catch (err) {
+      showToast("Could not create listing", "error");
       setError(err.response?.data?.error || "Could not create listing");
     } finally {
       setLoading(false);
@@ -100,13 +97,13 @@ export default function PostListing() {
     <div className="min-h-screen bg-ivory page-scroll">
       <TopBar title="Post a listing" />
       <form onSubmit={handleSubmit} className="px-4 py-4 space-y-3">
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {TYPES.map((t) => (
+                <div className="flex gap-2 overflow-x-auto pb-1">
+          {LISTING_TYPE_LIST.map((t) => (
             <button type="button" key={t.value} onClick={() => setType(t.value)}
-              className={`px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap ${
-                type === t.value ? "bg-teal text-white" : "bg-white border border-black/10 text-ink/70"
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs font-medium whitespace-nowrap transition-all duration-200 ${
+                type === t.value ? "bg-teal text-white shadow-sm" : "bg-white border border-black/10 text-ink/70 hover:border-teal/30"
               }`}>
-              {t.label}
+              <span>{t.icon}</span> {t.singular}
             </button>
           ))}
         </div>

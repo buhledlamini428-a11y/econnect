@@ -4,33 +4,33 @@ import api from "../api/client";
 import HomeHeader from "../components/HomeHeader";
 import BottomNav from "../components/BottomNav";
 import ListingCard from "../components/ListingCard";
-
-const QUICK = [
-  { type: "JOB", label: "Jobs", subtitle: "Find opportunities", icon: "💼", bg: "bg-teal/10", hoverBg: "group-hover:bg-teal/20" },
-  { type: "TASK", label: "Tasks", subtitle: "Get things done", icon: "🛠️", bg: "bg-blue-500/10", hoverBg: "group-hover:bg-blue-500/20" },
-  { type: "SERVICE", label: "Services", subtitle: "Professional help", icon: "🧰", bg: "bg-pink-500/10", hoverBg: "group-hover:bg-pink-500/20" },
-  { type: "PRODUCT", label: "Buy & Sell", subtitle: "Discover deals", icon: "🛍️", bg: "bg-sky-500/10", hoverBg: "group-hover:bg-sky-500/20" },
-  { type: "REQUEST", label: "Requests", subtitle: "Post a request", icon: "📣", bg: "bg-ochre/10", hoverBg: "group-hover:bg-ochre/20" },
-];
+import { ListingCardSkeletonList } from "../components/Skeleton";
+import EmptyState from "../components/EmptyState";
+import OnboardingCarousel from "../components/OnboardingCarousel";
+import { LISTING_TYPE_LIST } from "../constants/listingTypes";
 
 export default function Home() {
   const [listings, setListings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
-    api.get("/listings", { params: { pageSize: 10 } }).then((res) => setListings(res.data.listings));
+    api.get("/listings", { params: { pageSize: 10 } })
+      .then((res) => setListings(res.data.listings))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
     <div className="min-h-screen bg-ivory page-scroll">
+      <OnboardingCarousel />
       <HomeHeader />
 
       <div className="px-4 py-5">
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          {QUICK.map((q) => (
+          {LISTING_TYPE_LIST.map((q) => (
             <button
-              key={q.type}
-              onClick={() => navigate(`/explore?type=${q.type}`)}
+              key={q.value}
+              onClick={() => navigate(`/explore?type=${q.value}`)}
               className="group flex flex-col items-center gap-2 bg-white rounded-xl2 py-4 px-2 shadow-sm text-center
                          border border-transparent transition-all duration-200
                          hover:shadow-md hover:-translate-y-1 hover:border-teal/10 active:translate-y-0"
@@ -57,9 +57,22 @@ export default function Home() {
             See all →
           </button>
         </div>
-        <div className="space-y-3">
-          {listings.map((l) => <ListingCard key={l.id} listing={l} />)}
-        </div>
+
+        {loading ? (
+          <ListingCardSkeletonList count={4} />
+        ) : listings.length === 0 ? (
+          <EmptyState
+            icon="🧭"
+            title="Nothing here yet"
+            description="Be the first to post a job, service, or item in your area."
+            actionLabel="Post a listing"
+            onAction={() => navigate("/post")}
+          />
+        ) : (
+          <div className="space-y-3">
+            {listings.map((l) => <ListingCard key={l.id} listing={l} />)}
+          </div>
+        )}
       </div>
 
       <button

@@ -5,6 +5,8 @@ import TopBar from "../components/TopBar";
 import BottomNav from "../components/BottomNav";
 import TrustRing from "../components/TrustRing";
 import ListingCard from "../components/ListingCard";
+import { ProfileSkeleton } from "../components/Skeleton";
+import EmptyState from "../components/EmptyState";
 import { useAuth } from "../context/AuthContext";
 
 export default function Profile() {
@@ -15,10 +17,18 @@ export default function Profile() {
   const [data, setData] = useState(null);
 
   useEffect(() => {
+    setData(null);
     api.get(`/users/${profileId}`).then((res) => setData(res.data));
   }, [profileId]);
 
-  if (!data) return <div className="p-8 text-center text-teal">Loading...</div>;
+  if (!data) {
+    return (
+      <div className="min-h-screen bg-ivory page-scroll">
+        <TopBar title="Profile" showBack={!isOwn} />
+        <ProfileSkeleton />
+      </div>
+    );
+  }
   const { user, trustLevel, avgRating, ratingsCount } = data;
 
   return (
@@ -61,24 +71,34 @@ export default function Profile() {
 
         {isOwn && (
           <div className="flex gap-2 mt-5">
-            <Link to="/edit-profile" className="flex-1 text-center border border-teal text-teal font-semibold py-2.5 rounded-xl2 text-sm">
+            <Link
+              to="/edit-profile"
+              className="flex-1 text-center border border-teal text-teal font-semibold py-2.5 rounded-xl2 text-sm transition-all duration-200 hover:bg-teal hover:text-white"
+            >
               Edit profile
             </Link>
-            <Link to="/premium" className="flex-1 text-center bg-ochre text-teal-dark font-semibold py-2.5 rounded-xl2 text-sm">
+            <Link
+              to="/premium"
+              className="flex-1 text-center bg-ochre text-teal-dark font-semibold py-2.5 rounded-xl2 text-sm transition-all duration-200 hover:bg-ochre-dark hover:text-white"
+            >
               Get verified
             </Link>
           </div>
         )}
         {isOwn && (
-          <button onClick={logout} className="w-full text-center text-red-600 text-sm font-semibold mt-4">
+          <button onClick={logout} className="w-full text-center text-red-600 text-sm font-semibold mt-4 hover:underline">
             Log out
           </button>
         )}
 
         <h2 className="font-semibold text-ink text-sm mt-6 mb-2">Listings</h2>
-                <div className="space-y-3">
-          {user.listings?.map((l) => <ListingCard key={l.id} listing={l} />)}
-        </div>
+        {user.listings?.length > 0 ? (
+          <div className="space-y-3">
+            {user.listings.map((l) => <ListingCard key={l.id} listing={l} />)}
+          </div>
+        ) : (
+          <EmptyState icon="🗂️" title="No listings yet" description={isOwn ? "Post a job, service, or item to get started." : "This user hasn't posted anything yet."} />
+        )}
       </div>
       <BottomNav />
     </div>

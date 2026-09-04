@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 import Splash from "./pages/Splash";
@@ -22,7 +23,8 @@ import Admin from "./pages/Admin";
 
 export default function App() {
   return (
-    <AuthProvider>
+        <AuthProvider>
+      <ToastProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Splash />} />
@@ -45,7 +47,8 @@ export default function App() {
           <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
         </Routes>
-      </BrowserRouter>
+           </BrowserRouter>
+      </ToastProvider>
     </AuthProvider>
   );
 }

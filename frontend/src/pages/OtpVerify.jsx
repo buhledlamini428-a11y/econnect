@@ -2,6 +2,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { useAuth } from "../context/AuthContext";
+import StepProgress from "../components/StepProgress";
 
 export default function OtpVerify() {
   const { state } = useLocation();
@@ -35,8 +36,9 @@ export default function OtpVerify() {
 
   return (
     <div className="min-h-screen bg-ivory px-6 py-10">
-      <h1 className="font-display font-bold text-2xl text-ink mb-1">Check your email</h1>
-      <p className="text-ink/60 mb-6">Enter the 6-digit code sent to {email}</p>
+           <StepProgress step={2} total={2} labels={["Your details", "Verify email"]} />
+      <h1 className="font-display font-bold text-2xl text-ink mb-1">Check your email</h1> 
+       <p className="text-ink/60 mb-6">Enter the 6-digit code sent to {email}</p>
 
       <form onSubmit={handleVerify} className="space-y-4">
         <input
