@@ -29,7 +29,7 @@ export default function Login() {
   return (
     <div className="min-h-screen bg-ivory px-6 py-10">
       <h1 className="font-display font-bold text-2xl text-ink mb-1">Welcome back</h1>
-      <p className="text-ink/60 mb-6">Log in to continue to E-connect</p>
+      <p className="text-ink/60 mb-6">Log in to continue to Netta</p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
