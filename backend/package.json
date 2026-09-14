@@ -1,5 +1,5 @@
 {
-  "name": "econnect-backend",
+  "name": "netta-backend",
   "version": "1.0.0",
   "description": "E-connect API - jobs, tasks, services, buy & sell, requests platform for Eswatini",
   "main": "src/index.js",

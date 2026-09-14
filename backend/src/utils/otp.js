@@ -21,10 +21,10 @@ export async function sendOtp(email, code) {
     body: JSON.stringify({
       from,
       to: email,
-      subject: "Your E-connect verification code",
+            subject: "Your Netta verification code",
       html: `
         <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto;">
-          <h2 style="color:#241C5E;">E-connect</h2>
+          <h2 style="color:#241C5E;">Netta</h2>
           <p>Your verification code is:</p>
           <p style="font-size: 32px; font-weight: bold; letter-spacing: 6px; color:#241C5E;">${code}</p>
           <p style="color:#666; font-size: 13px;">This code expires in 10 minutes. If you didn't request this, you can ignore this email.</p>

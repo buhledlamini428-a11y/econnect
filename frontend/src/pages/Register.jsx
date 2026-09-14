@@ -34,7 +34,7 @@ export default function Register() {
     <div className="min-h-screen bg-ivory px-6 py-8">
             <StepProgress step={1} total={2} labels={["Your details", "Verify email"]} />
       <h1 className="font-display font-bold text-2xl text-ink mb-1">Create your account</h1>
-      <p className="text-ink/60 mb-6">Basic use of E-connect is always free.</p> 
+      <p className="text-ink/60 mb-6">Basic use of Netta is always free.</p> 
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <input placeholder="Full name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)}

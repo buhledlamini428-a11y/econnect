@@ -17,14 +17,13 @@ export default function Welcome() {
       </div>
 
       <div className="flex-1 flex flex-col items-start px-6 pt-6 pb-10 max-w-xl mx-auto w-full">
-        <img src="/logo2.png" alt="E-connect" className="h-16 w-auto mb-6" />
-
+         <img src="/logo2.png" alt="Netta" className="h-14 w-auto mb-6" />
         <h1 className="font-display font-extrabold text-3xl md:text-4xl text-ink leading-tight">
           Find work. Offer services.<br />
           Buy & sell <span className="text-ochre-dark">locally</span>.
         </h1>
         <p className="text-ink/60 mt-3 max-w-md">
-          E-connect links people across Eswatini for jobs, short tasks, services, and everyday buying and selling — built on trust.
+          Netta links people across Eswatini for jobs, short tasks, services, and everyday buying and selling — built on trust.
         </p>
 
         <div className="space-y-3 mt-6 w-full max-w-sm">

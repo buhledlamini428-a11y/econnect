@@ -10,8 +10,8 @@ export default function Splash() {
 
   return (
     <div className="h-screen bg-teal-dark flex flex-col items-center justify-center text-white">
-      <img src="/logo.png" alt="E-connect" className="w-24 h-24 object-contain mb-4" />
-      <h1 className="font-display font-bold text-2xl">E-connect</h1>
+            <img src="/logo.png" alt="Netta" className="w-24 h-24 object-contain mb-4" />
+      <h1 className="font-display font-bold text-2xl">Netta</h1> 
       <p className="text-white/60 text-sm mt-1">Jobs · Services · Marketplace · Eswatini</p>
     </div>
   );

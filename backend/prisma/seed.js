@@ -63,7 +63,7 @@ async function main() {
     where: { email: adminEmail },
     update: {},
     create: {
-      fullName: "E-connect Admin",
+            fullName: "Netta Admin",
       username: "econnect_admin",
       email: adminEmail,
       phone: adminPhone,

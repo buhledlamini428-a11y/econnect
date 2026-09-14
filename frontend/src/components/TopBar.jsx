@@ -7,8 +7,8 @@ export default function TopBar({ title, showBack = false }) {
         <button onClick={() => window.history.back()} className="text-white/90 text-lg">←</button>
       ) : (
         <Link to="/home" className="flex items-center gap-2">
-          <img src="/logo.png" alt="E-connect" className="h-16 w-auto" />
-        </Link>
+           <img src="/logo.png" alt="Netta" className="h-16 w-auto" />
+         </Link>
       )}
       {title && <h1 className="font-display font-semibold text-base">{title}</h1>}
     </div>

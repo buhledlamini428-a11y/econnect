@@ -22,8 +22,8 @@ export default function HomeHeader() {
     <div className="bg-teal text-white px-4 pt-5 pb-6 rounded-b-[1.75rem] shadow-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <img src="/logo.png" alt="E-connect" className="h-10 w-auto" />
-          <div className="hidden sm:block leading-tight">
+           <img src="/logo.png" alt="Netta" className="h-10 w-auto" />
+           <div className="hidden sm:block leading-tight">
             <p className="text-sm font-semibold">People. Opportunities. Trust.</p>
           </div>
         </div>
