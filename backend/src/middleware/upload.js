@@ -1,18 +1,6 @@
-import multer from "multer";
-import path from "path";
+ import multer from "multer";
 import { v4 as uuid } from "uuid";
-import fs from "fs";
-
-const UPLOAD_DIR = path.resolve("uploads");
-if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, UPLOAD_DIR),
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname).toLowerCase();
-    cb(null, `${uuid()}${ext}`);
-  },
-});
+import path from "path";
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
@@ -24,9 +12,12 @@ function fileFilter(req, file, cb) {
 }
 
 export const upload = multer({
-  storage,
+  storage: multer.memoryStorage(),
   fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024, files: 6 }, // 5MB per file, max 6 files
+  limits: { fileSize: 5 * 1024 * 1024, files: 6 },
 });
 
-export const UPLOAD_DIR_PATH = UPLOAD_DIR;
+export function generateFileName(originalName) {
+  const ext = path.extname(originalName).toLowerCase();
+  return `listings/${uuid()}${ext}`;
+}

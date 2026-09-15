@@ -1,16 +1,30 @@
-import { Router } from "express";
-import { upload } from "../middleware/upload.js";
+ import { Router } from "express";
+import { upload, generateFileName } from "../middleware/upload.js";
 import { requireAuth } from "../middleware/auth.js";
+import supabase from "../lib/supabase.js";
 
 const router = Router();
+const BUCKET = process.env.SUPABASE_BUCKET;
 
-// POST /api/upload — field name must be "photos", accepts up to 6 images
-router.post("/", requireAuth, upload.array("photos", 6), (req, res, next) => {
+router.post("/", requireAuth, upload.array("photos", 6), async (req, res, next) => {
   try {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({ error: "No files uploaded" });
     }
-    const urls = req.files.map((f) => `/uploads/${f.filename}`);
+
+    const urls = [];
+    for (const file of req.files) {
+      const fileName = generateFileName(file.originalname);
+      const { error } = await supabase.storage
+        .from(BUCKET)
+        .upload(fileName, file.buffer, { contentType: file.mimetype });
+
+      if (error) throw error;
+
+      const { data } = supabase.storage.from(BUCKET).getPublicUrl(fileName);
+      urls.push(data.publicUrl);
+    }
+
     res.status(201).json({ urls });
   } catch (err) {
     next(err);
