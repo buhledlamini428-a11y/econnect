@@ -20,6 +20,7 @@ import EditProfile from "./pages/EditProfile";
 import Premium from "./pages/Premium";
 import Report from "./pages/Report";
 import Admin from "./pages/Admin";
+import Notifications from "./pages/Notifications";
 
 export default function App() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
           <Route path="/premium" element={<ProtectedRoute><Premium /></ProtectedRoute>} />
           <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
+                    <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
         </Routes>
            </BrowserRouter>
       </ToastProvider>

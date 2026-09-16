@@ -31,8 +31,8 @@ export default function Search() {
   return (
     <div className="min-h-screen bg-ivory page-scroll">
       <TopBar title="Search" showBack />
-      <div className="sticky top-[56px] z-10 bg-ivory px-4 py-3 space-y-2 shadow-sm">
-        <div className="flex gap-2">
+            <div className="sticky top-[68px] z-10 bg-ivory px-4 py-3 space-y-2 shadow-sm">
+         <div className="flex gap-2">
           <input
             value={q} onChange={(e) => setQ(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && runSearch()}

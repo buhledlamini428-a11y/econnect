@@ -25,8 +25,8 @@ export default function Explore() {
   return (
     <div className="min-h-screen bg-ivory page-scroll">
       <TopBar title="Explore" />
-      <div className="sticky top-[56px] z-10 bg-ivory flex gap-2 px-4 py-3 overflow-x-auto shadow-sm">
-        {LISTING_TYPE_LIST.map((t) => (
+            <div className="sticky top-[68px] z-10 bg-ivory flex gap-2 px-4 py-3 overflow-x-auto shadow-sm">
+         {LISTING_TYPE_LIST.map((t) => (
           <button
             key={t.value}
             onClick={() => setParams({ type: t.value })}
