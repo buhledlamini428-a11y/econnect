@@ -24,7 +24,7 @@ export default function Profile() {
   if (!data) {
     return (
       <div className="min-h-screen bg-ivory page-scroll">
-        <TopBar title="Profile" showBack={!isOwn} />
+               <TopBar title="Profile" subtitle={isOwn ? "Manage your account and listings" : "View this user's profile"} showBack={!isOwn} />
         <ProfileSkeleton />
       </div>
     );
@@ -33,7 +33,7 @@ export default function Profile() {
 
   return (
     <div className="min-h-screen bg-ivory page-scroll">
-      <TopBar title="Profile" showBack={!isOwn} />
+            <TopBar title="Profile" subtitle={isOwn ? "Manage your account and listings" : "View this user's profile"} showBack={!isOwn} />
       <div className="px-4 py-5">
         <div className="flex items-center gap-4">
           <div className="w-16 h-16 rounded-full bg-teal/10 flex items-center justify-center font-display font-bold text-xl text-teal">

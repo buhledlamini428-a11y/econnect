@@ -24,7 +24,7 @@ export default function Explore() {
 
   return (
     <div className="min-h-screen bg-ivory page-scroll">
-      <TopBar title="Explore" />
+             <TopBar title="Explore" subtitle="Discover jobs, tasks, services and more nearby" />
             <div className="sticky top-[68px] z-10 bg-ivory flex gap-2 px-4 py-3 overflow-x-auto shadow-sm">
          {LISTING_TYPE_LIST.map((t) => (
           <button

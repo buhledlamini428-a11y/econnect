@@ -27,7 +27,7 @@ export default function Report() {
 
   return (
     <div className="min-h-screen bg-ivory">
-      <TopBar title="Report" showBack />
+            <TopBar title="Report" subtitle="Help us keep Netta safe" showBack />
       {done ? (
         <p className="p-6 text-center text-teal font-medium">Report submitted. Our team will review it.</p>
       ) : (

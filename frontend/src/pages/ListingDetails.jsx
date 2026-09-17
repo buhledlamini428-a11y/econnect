@@ -47,7 +47,7 @@ export default function ListingDetails() {
   if (!listing) {
     return (
       <div className="min-h-screen bg-ivory">
-        <TopBar title="Listing" showBack />
+             <TopBar title="Listing" subtitle="Full details and contact options" showBack />
         <div className="h-56 bg-black/5 animate-pulse" />
         <div className="px-4 py-4 space-y-3 animate-pulse">
           <div className="h-4 w-16 bg-black/10 rounded-full" />

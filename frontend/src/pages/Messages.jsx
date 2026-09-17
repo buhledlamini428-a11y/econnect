@@ -19,7 +19,7 @@ export default function Messages() {
 
   return (
     <div className="min-h-screen bg-ivory page-scroll">
-      <TopBar title="Messages" />
+            <TopBar title="Messages" subtitle="Chats with buyers, sellers and employers" />
       <div className="py-3">
         {loading ? (
           <MessageListSkeleton />

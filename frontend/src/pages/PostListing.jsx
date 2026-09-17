@@ -95,7 +95,7 @@ export default function PostListing() {
 
   return (
     <div className="min-h-screen bg-ivory page-scroll">
-      <TopBar title="Post a listing" />
+            <TopBar title="Post a listing" subtitle="Reach people near you in minutes" />
       <form onSubmit={handleSubmit} className="px-4 py-4 space-y-3">
                 <div className="flex gap-2 overflow-x-auto pb-1">
           {LISTING_TYPE_LIST.map((t) => (

@@ -32,7 +32,7 @@ export default function EditProfile() {
 
   return (
     <div className="min-h-screen bg-ivory">
-      <TopBar title="Edit profile" showBack />
+           <TopBar title="Edit profile" subtitle="Update your details and location" showBack />
       <form onSubmit={handleSubmit} className="px-4 py-4 space-y-3">
         <input placeholder="Full name" value={form.fullName} onChange={(e) => update("fullName", e.target.value)}
           className="w-full border border-black/10 rounded-xl px-4 py-3 bg-white" />

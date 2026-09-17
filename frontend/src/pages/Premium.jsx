@@ -18,7 +18,7 @@ export default function Premium() {
 
   return (
     <div className="min-h-screen bg-ivory page-scroll">
-      <TopBar title="Premium services" showBack />
+                  <TopBar title="Premium services" subtitle="Boost your visibility on Netta" showBack />
       <div className="px-4 py-4 space-y-3">
         <p className="text-ink/60 text-sm">Basic use of E-connect is always free. Pay only for these optional extras.</p>
         {plans.map((p) => (
