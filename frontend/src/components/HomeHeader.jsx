@@ -32,7 +32,7 @@ export default function HomeHeader() {
         <div
       className="text-white px-4 pt-5 pb-5 shadow-md relative z-10 bg-teal-dark"
       style={{
-        backgroundImage: "url('/topbar-bg.svg')",
+                backgroundImage: "url('/topbar-bg-home.svg')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
