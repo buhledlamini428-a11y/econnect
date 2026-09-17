@@ -2,8 +2,16 @@
 
 export default function TopBar({ title, showBack = false }) {
   return (
-    <div className="sticky top-0 z-10 bg-gradient-to-br from-teal to-teal-dark text-white px-4 py-4 shadow-md">
-      <div className="flex items-center gap-3">
+        <div
+      className="sticky top-0 z-10 text-white px-4 py-4 shadow-md bg-teal-dark"
+      style={{
+        backgroundImage: "url('/topbar-bg.svg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+       <div className="flex items-center gap-3">
         {showBack && (
           <button
             onClick={() => window.history.back()}

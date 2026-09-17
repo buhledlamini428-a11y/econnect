@@ -29,8 +29,16 @@ export default function HomeHeader() {
   }
 
   return (
-    <div className="bg-gradient-to-br from-teal to-teal-dark text-white px-4 pt-5 pb-5 shadow-md relative z-10">
-      <div className="flex items-center justify-between">
+        <div
+      className="text-white px-4 pt-5 pb-5 shadow-md relative z-10 bg-teal-dark"
+      style={{
+        backgroundImage: "url('/topbar-bg.svg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+      }}
+    >
+       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <img src="/logo.png" alt="Netta" className="h-10 w-auto" />
         </div>
