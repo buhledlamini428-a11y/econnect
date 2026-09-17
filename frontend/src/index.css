@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --ivory-rgb: 246 245 251;
+  --ink-rgb: 27 23 48;
+}
+[data-theme="dark"] {
+  --ivory-rgb: 20 18 36;
+  --ink-rgb: 237 235 245;
+}
+[data-theme="dark"] body {
+  background-color: rgb(var(--ivory-rgb));
+}
+
 html, body {
   font-family: "Inter", sans-serif;
   color: #1B1730;

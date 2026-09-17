@@ -8,8 +8,8 @@ export default {
         teal: { DEFAULT: "#241C5E", dark: "#171142", light: "#3A2F8C" },
         // "ochre" now holds the violet-blue accent from the logo mark
         ochre: { DEFAULT: "#6D5DFB", dark: "#4F3FE0", light: "#9B8CFF" },
-        ivory: "#F6F5FB",
-        ink: "#1B1730",
+                 ivory: "rgb(var(--ivory-rgb) / <alpha-value>)",
+        ink: "rgb(var(--ink-rgb) / <alpha-value>)",
       },
       fontFamily: {
         display: ["Sora", "sans-serif"],

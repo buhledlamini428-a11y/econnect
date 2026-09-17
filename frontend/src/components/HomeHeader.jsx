@@ -42,7 +42,14 @@ export default function HomeHeader() {
         <div className="flex items-center gap-2.5">
           <img src="/logo.png" alt="Netta" className="h-10 w-auto" />
         </div>
-        <div className="flex items-center gap-2.5">
+                 <div className="flex items-center gap-2.5">
+          <Link
+            to="/settings"
+            className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center
+                       transition-all duration-200 hover:bg-white/20 hover:scale-105"
+          >
+            <span className="text-lg">⚙️</span>
+          </Link>
           <Link
             to="/notifications"
             className="relative w-9 h-9 rounded-full bg-white/10 flex items-center justify-center

@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import Splash from "./pages/Splash";
 import Welcome from "./pages/Welcome";
@@ -21,10 +22,15 @@ import Premium from "./pages/Premium";
 import Report from "./pages/Report";
 import Admin from "./pages/Admin";
 import Notifications from "./pages/Notifications";
+import Settings from "./pages/Settings";
+import AboutNetta from "./pages/AboutNetta";
+import ContactInfo from "./pages/ContactInfo";
+import HelpSupport from "./pages/HelpSupport";
 
 export default function App() {
   return (
-        <AuthProvider>
+            <AuthProvider>
+      <ThemeProvider>
       <ToastProvider>
       <BrowserRouter>
         <Routes>
@@ -48,9 +54,14 @@ export default function App() {
           <Route path="/report" element={<ProtectedRoute><Report /></ProtectedRoute>} />
           <Route path="/admin" element={<ProtectedRoute adminOnly><Admin /></ProtectedRoute>} />
                     <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+                              <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+          <Route path="/settings/about" element={<ProtectedRoute><AboutNetta /></ProtectedRoute>} />
+          <Route path="/settings/contact" element={<ProtectedRoute><ContactInfo /></ProtectedRoute>} />
+          <Route path="/settings/help" element={<ProtectedRoute><HelpSupport /></ProtectedRoute>} />
         </Routes>
            </BrowserRouter>
-      </ToastProvider>
+            </ToastProvider>
+      </ThemeProvider>
     </AuthProvider>
   );
 }
