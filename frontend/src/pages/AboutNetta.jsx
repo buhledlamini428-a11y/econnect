@@ -5,7 +5,7 @@ export default function AboutNetta() {
     <div className="min-h-screen bg-ivory page-scroll">
       <TopBar title="About Netta" subtitle="Connection, opportunity, and trust" showBack />
       <div className="px-5 py-6 space-y-4">
-        <img src="/logo.png" alt="Netta" className="h-16 w-auto mx-auto mb-2" />
+        <img src="/logo1.png" alt="Netta" className="h-16 w-auto mx-auto mb-2" />
         <p className="text-ink/70 text-sm leading-relaxed">
           Netta is a local jobs, services, tasks, buying and selling platform built for Eswatini. We connect people who need work
           or services with people who can provide them — without the noise of a typical social media app.
