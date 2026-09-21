@@ -20,27 +20,21 @@ router.post("/register", validateBody(schemas.register), async (req, res, next) 
       return res.status(409).json({ error: "An account with this phone, username, or email already exists" });
     }
 
-    const hashed = await bcrypt.hash(password, 10);
+     const hashed = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
       data: {
         fullName, username, phone, email,
         password: hashed,
         dateOfBirth: dateOfBirth ? new Date(dateOfBirth) : null,
         gender, region, city,
+        // OTP verification is temporarily disabled — new accounts are marked verified immediately.
+        isEmailVerified: true,
+        isPhoneVerified: true,
       },
     });
 
-    const code = generateOtpCode();
-    await prisma.otp.create({
-      data: {
-        userId: user.id, email,
-        code, purpose: "registration",
-        expiresAt: new Date(Date.now() + OTP_EXPIRY_MIN * 60 * 1000),
-      },
-    });
-    await sendOtp(email, code);
-
-    res.status(201).json({ message: "Registered. OTP sent to email.", userId: user.id, email });
+    const token = signToken(user);
+    res.status(201).json({ token, user: sanitizeUser(user) });
   } catch (err) {
     next(err);
   }

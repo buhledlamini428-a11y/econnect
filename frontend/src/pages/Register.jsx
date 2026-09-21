@@ -2,14 +2,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
 import StepProgress from "../components/StepProgress";
+import { useAuth } from "../context/AuthContext";
 
-export default function Register() {
+ export default function Register() {
   const [form, setForm] = useState({
     fullName: "", username: "", phone: "", email: "", password: "", region: "", city: "",
   });
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   function update(key, value) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -19,10 +21,10 @@ export default function Register() {
     e.preventDefault();
     setError("");
     setLoading(true);
-    try {
-      
-           await api.post("/auth/register", form);
-      navigate("/verify-otp", { state: { email: form.email } }); 
+       try {
+      const res = await api.post("/auth/register", form);
+      login(res.data.token, res.data.user);
+      navigate("/home");
     } catch (err) {
       setError(err.response?.data?.error || "Registration failed");
     } finally {
@@ -32,8 +34,7 @@ export default function Register() {
 
   return (
     <div className="min-h-screen bg-ivory px-6 py-8">
-            <StepProgress step={1} total={2} labels={["Your details", "Verify email"]} />
-      <h1 className="font-display font-bold text-2xl text-ink mb-1">Create your account</h1>
+             <h1 className="font-display font-bold text-2xl text-ink mb-1">Create your account</h1>  
       <p className="text-ink/60 mb-6">Basic use of Netta is always free.</p> 
 
       <form onSubmit={handleSubmit} className="space-y-3">
