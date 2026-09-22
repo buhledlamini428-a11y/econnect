@@ -7,16 +7,22 @@ export default function AboutNetta() {
       <div className="px-5 py-6 space-y-4">
         <img src="/logo1.png" alt="Netta" className="h-16 w-auto mx-auto mb-2" />
         <p className="text-ink/70 text-sm leading-relaxed">
-          Netta is a local jobs, services, tasks, buying and selling platform built for Eswatini. We connect people who need work
-          or services with people who can provide them — without the noise of a typical social media app.
+          Netta is a community marketplace that connects people with jobs, services, buyers, sellers and opportunities.
         </p>
         <p className="text-ink/70 text-sm leading-relaxed">
-          Whether you're looking for a job, offering a skill, selling something you no longer need, or trying to find someone
-          reliable for a quick task, Netta is built to make that connection simple, safe, and local.
+          From finding someone to help in your garden for an hour, to looking for long-term work, offering your skills, 
+          selling an item or finding something you need—Netta brings these connections together in one place.
         </p>
         <p className="text-ink/70 text-sm leading-relaxed">
-          Every user builds a Trust Score over time based on real activity, verified identity, and reviews from others in the
-          community — because trust is the foundation everything else on Netta is built on.
+          Built with Eswatini in mind and with a vision for Africa, Netta is designed to make
+           everyday connections easier, safer and more accessible.
+        </p>
+        <p className="text-ink/70 text-sm leading-relaxed">
+         Our mission: Connect people with opportunities, services and everyday needs.
+        </p>
+         <p className="text-ink/70 text-sm leading-relaxed">
+         
+         Netta — Connect. Find. Offer. Trade.
         </p>
         <p className="text-ink/40 text-xs text-center pt-4">Version 1.1.1 · Made for Eswatini 🇸🇿</p>
       </div>

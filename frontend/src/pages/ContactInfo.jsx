@@ -1,8 +1,8 @@
 import TopBar from "../components/TopBar";
 
 const CHANNELS = [
-  { icon: "✉️", label: "Email", value: "support@netta.app", href: "mailto:support@netta.app" },
-  { icon: "📞", label: "Phone", value: "+268 7600 0000", href: "tel:+26876000000" },
+  { icon: "✉️", label: "Email", value: "nettainformation@gmail.com", href: "mailto:nettainformation@gmail.com" },
+  { icon: "📞", label: "Phone", value: "+268 7667 2068/7690 6432", href: "tel:+26876672068" },
   { icon: "📍", label: "Location", value: "Mbabane, Eswatini", href: null },
 ];
 

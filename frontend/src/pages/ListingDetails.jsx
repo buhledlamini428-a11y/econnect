@@ -8,10 +8,12 @@ import { timeAgo } from "../utils/timeAgo";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 
-export default function ListingDetails() {
+
+ export default function ListingDetails() {
   const { id } = useParams();
   const [listing, setListing] = useState(null);
   const [photoIndex, setPhotoIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
   const { user } = useAuth();
@@ -47,8 +49,8 @@ export default function ListingDetails() {
   if (!listing) {
     return (
       <div className="min-h-screen bg-ivory">
-             <TopBar title="Listing" subtitle="Full details and contact options" showBack />
-        <div className="h-56 bg-black/5 animate-pulse" />
+              <TopBar title="Listing" subtitle="Full details and contact options" showBack />
+         <div className="h-56 bg-black/5 animate-pulse" />
         <div className="px-4 py-4 space-y-3 animate-pulse">
           <div className="h-4 w-16 bg-black/10 rounded-full" />
           <div className="h-5 w-2/3 bg-black/10 rounded" />
@@ -63,12 +65,18 @@ export default function ListingDetails() {
 
   return (
     <div className="min-h-screen bg-ivory page-scroll">
-      <TopBar title="Listing" showBack />
+           <TopBar title="Listing" subtitle="Full details and contact options" showBack />
 
-      <div className="relative h-56 bg-teal/5 flex items-center justify-center overflow-hidden">
+      
+            <div className="relative h-56 bg-teal/5 flex items-center justify-center overflow-hidden">
         {photos.length > 0 ? (
           <>
-            <img src={photos[photoIndex]} className="w-full h-full object-cover" alt="" />
+            <img
+              src={photos[photoIndex]}
+              className="w-full h-full object-cover cursor-zoom-in"
+              alt=""
+              onClick={() => setLightboxOpen(true)}
+            />
             {photos.length > 1 && (
               <>
                 <button
@@ -86,11 +94,49 @@ export default function ListingDetails() {
                 </div>
               </>
             )}
-          </>
+                     </>
         ) : (
           <span className="text-teal/40 text-5xl">📦</span>
         )}
       </div>
+
+      {lightboxOpen && (
+        <div
+          className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <button
+            onClick={() => setLightboxOpen(false)}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 text-white flex items-center justify-center text-xl"
+            aria-label="Close"
+          >
+            ×
+          </button>
+          <img
+            src={photos[photoIndex]}
+            className="max-w-full max-h-full object-contain"
+            alt=""
+            onClick={(e) => e.stopPropagation()}
+          />
+          {photos.length > 1 && (
+            <>
+              <button
+                onClick={(e) => { e.stopPropagation(); setPhotoIndex((i) => (i - 1 + photos.length) % photos.length); }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/10 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl"
+              >‹</button>
+              <button
+                onClick={(e) => { e.stopPropagation(); setPhotoIndex((i) => (i + 1) % photos.length); }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/10 text-white w-10 h-10 rounded-full flex items-center justify-center text-xl"
+              >›</button>
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
+                {photos.map((_, i) => (
+                  <span key={i} className={`w-1.5 h-1.5 rounded-full ${i === photoIndex ? "bg-white" : "bg-white/40"}`} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      )}
 
       <div className="px-4 py-4">
         <div className="flex items-center justify-between">
