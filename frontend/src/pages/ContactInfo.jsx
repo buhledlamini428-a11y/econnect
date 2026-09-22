@@ -12,9 +12,9 @@ export default function ContactInfo() {
       <TopBar title="Contact info" subtitle="Ways to reach the Netta team" showBack />
       <div className="px-4 py-4 space-y-3">
         {CHANNELS.map((c) => {
-          const content = (
-            <div className="flex items-center gap-3 bg-white rounded-xl2 p-4 border border-black/5 transition-all duration-200 hover:shadow-md">
-              <span className="text-xl shrink-0">{c.icon}</span>
+                     const content = (
+            <div className="flex items-center gap-3 bg-white rounded-xl2 p-4 border border-black/5 min-h-[68px] transition-all duration-200 hover:shadow-md">
+              <span className="w-8 h-8 flex items-center justify-center text-xl shrink-0">{c.icon}</span>
               <div>
                 <p className="font-semibold text-ink text-sm">{c.label}</p>
                 <p className="text-ink/60 text-sm">{c.value}</p>
