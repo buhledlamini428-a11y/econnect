@@ -21,17 +21,29 @@ export default function Report() {
      const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e) {
+     async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      await api.post("/reports", { listingId, reportedUserId, reason, details });
+      await api.post("/reports", {
+        listingId: listingId || undefined,
+        reportedUserId: reportedUserId || undefined,
+        reason,
+        details: details || undefined,
+      });
       setDone(true);
       setTimeout(() => navigate(-1), 1500);
-    } catch (err) {
-      setError(err.response?.data?.error || "Could not submit report. Please try again.");
-    } finally {
+        } catch (err) {
+      const fieldErrors = err.response?.data?.details?.fieldErrors;
+      if (fieldErrors) {
+        const firstField = Object.keys(fieldErrors)[0];
+        const firstMessage = fieldErrors[firstField]?.[0];
+        setError(firstMessage ? `${firstField}: ${firstMessage}` : "Could not submit report. Please try again.");
+      } else {
+        setError(err.response?.data?.error || "Could not submit report. Please try again.");
+      }
+    } finally {     
       setLoading(false);
     }
   }
