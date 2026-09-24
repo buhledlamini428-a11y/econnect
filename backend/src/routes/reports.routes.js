@@ -39,8 +39,14 @@ router.post("/", requireAuth, validateBody(schemas.report), async (req, res, nex
         });
         await prisma.conversation.update({ where: { id: convo.id }, data: { lastMessageAt: new Date() } });
 
-        await prisma.notification.create({
-          data: { userId: admin.id, type: "report", title: "New report submitted", body: `${reasonLabel} — from ${req.user.fullName}` },
+              await prisma.notification.create({
+          data: {
+            userId: admin.id,
+            type: "report",
+            title: "New report submitted",
+            body: `${reasonLabel} — from ${req.user.fullName}`,
+            relatedListingId: report.listingId || null,
+          },
         });
       }
     } catch (notifyErr) {

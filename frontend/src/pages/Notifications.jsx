@@ -6,12 +6,13 @@ import BottomNav from "../components/BottomNav";
 import EmptyState from "../components/EmptyState";
 import { timeAgo } from "../utils/timeAgo";
 
-const TYPE_META = {
+ const TYPE_META = {
   message: { icon: "💬", bg: "bg-gradient-to-br from-sky-400 to-blue-600", filter: "messages" },
   application: { icon: "📋", bg: "bg-gradient-to-br from-teal to-teal-dark", filter: "system" },
   account_status: { icon: "⚠️", bg: "bg-gradient-to-br from-amber-400 to-orange-600", filter: "system" },
   payment: { icon: "💳", bg: "bg-gradient-to-br from-emerald-400 to-emerald-600", filter: "system" },
   rating: { icon: "⭐", bg: "bg-gradient-to-br from-ochre to-ochre-dark", filter: "updates" },
+  report: { icon: "🚩", bg: "bg-gradient-to-br from-red-400 to-red-600", filter: "system" },
   default: { icon: "🔔", bg: "bg-gradient-to-br from-purple-400 to-purple-600", filter: "updates" },
 };
 
@@ -39,8 +40,12 @@ export default function Notifications() {
     return meta.filter === filter;
   });
 
-  function handleClick(n) {
-    if (n.type === "message") navigate("/messages");
+    function handleClick(n) {
+    if (n.relatedListingId) {
+      navigate(`/listing/${n.relatedListingId}`);
+    } else if (n.type === "message") {
+      navigate("/messages");
+    }
   }
 
   return (
