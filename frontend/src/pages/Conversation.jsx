@@ -30,7 +30,7 @@ export default function Conversation() {
 
   return (
     <div className="min-h-screen bg-ivory flex flex-col">
-      <TopBar title="Conversation" showBack />
+            <TopBar title="Conversation" subtitle="Message history for this chat" showBack />
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
         {convo.messages.map((m) => (
           <div key={m.id} className={`max-w-[75%] px-3 py-2 rounded-2xl text-sm ${
