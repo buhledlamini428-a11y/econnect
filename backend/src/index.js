@@ -23,7 +23,24 @@ dotenv.config();
 const app = express();
 
 app.use(helmet());
-app.use(cors({ origin: process.env.CLIENT_URL || "*", credentials: true }));
+ const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "https://localhost", // Capacitor Android WebView origin
+  "capacitor://localhost", // Capacitor iOS WebView origin (for future use)
+  "http://localhost", // fallback, some Android WebView versions use plain http
+].filter(Boolean);
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. curl, server-to-server) and any explicitly allowed origin
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json({ limit: "5mb" }));
 app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev"));
 
