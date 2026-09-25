@@ -23,7 +23,7 @@ export default function EditProfile() {
     try {
       const res = await api.put("/users/me", form);
       setUser(res.data.user);
-      localStorage.setItem("econnect_user", JSON.stringify(res.data.user));
+       localStorage.setItem("netta_user", JSON.stringify(res.data.user));
       navigate("/profile");
     } finally {
       setLoading(false);
